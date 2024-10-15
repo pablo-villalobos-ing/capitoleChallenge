@@ -7,7 +7,7 @@ spring:
     platform: h2
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
     datasource:
       initialization-mode: always

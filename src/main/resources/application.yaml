@@ -7,10 +7,11 @@ spring:
     platform: h2
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     datasource:
       initialization-mode: always
+      platform: h2
   h2:
     console:
       enabled: true

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class PriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "price_seq")
-    @SequenceGenerator(name = "price_seq", sequenceName = "price_seq", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "price_seq", sequenceName = "price_seq", allocationSize = 1)
 
     private Long id;
     @Column(name = "\"value\"")

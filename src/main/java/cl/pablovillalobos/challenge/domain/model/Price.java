@@ -21,5 +21,6 @@ public class Price {
     private LocalDateTime endDate;
     private Integer priceList;
     private Long productId;
+    private Long brandId;
     private Short priority;
 }

@@ -1,6 +1,5 @@
-package cl.pablovillalobos.challenge.domain.model;
+package cl.pablovillalobos.challenge.infrastructure.controllers.dto;
 
-import cl.pablovillalobos.challenge.infrastructure.util.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,15 +10,14 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class Price {
-    private Long id;
-    private BigDecimal value;
-    private Currency currency;
+@AllArgsConstructor
+public class PriceResponseDto {
+    private Long productId;
+    private Long brandId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer priceList;
-    private Long productId;
-    private Short priority;
+    private BigDecimal value;
+
 }

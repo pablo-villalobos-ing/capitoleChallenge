@@ -1,6 +1,6 @@
 package cl.pablovillalobos.challenge.infrastructure.entities;
 
-import cl.pablovillalobos.challenge.util.Currency;
+import cl.pablovillalobos.challenge.infrastructure.util.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -30,6 +30,7 @@ public class PriceController {
                     .toList();
             return ResponseEntity.badRequest().body(errors);
         }
+        log.info("dto received on PriceController");
         var response = priceService.foundPrice(dto);
         if (response.isPresent()) {
             return ResponseEntity.ok().body(response.get());

@@ -22,10 +22,12 @@ public class PriceService implements RequestPriceUseCase {
     public Optional<PriceResponseDto> foundPrice(PriceRequestDto dto) {
         var brand = brandService.getBrandEntityById(dto.getBrandId());
         if (brand == null) {
+            log.warn("Brand not found, with id: " + dto.getBrandId());
             return Optional.empty();
         }
         var product = productService.getProductById(dto.getProductId());
         if (product == null) {
+            log.warn("Product not found, with id: " + dto.getProductId());
             return Optional.empty();
         }
         log.info("dto on Application layer");

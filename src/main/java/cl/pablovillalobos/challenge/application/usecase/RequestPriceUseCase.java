@@ -1,8 +1,10 @@
 package cl.pablovillalobos.challenge.application.usecase;
 
-import cl.pablovillalobos.challenge.domain.model.Price;
 import cl.pablovillalobos.challenge.infrastructure.controllers.dto.PriceRequestDto;
+import cl.pablovillalobos.challenge.infrastructure.controllers.dto.PriceResponseDto;
+
+import java.util.Optional;
 
 public interface RequestPriceUseCase {
-    Price foundPrice(PriceRequestDto dto);
+    Optional<PriceResponseDto> foundPrice(PriceRequestDto dto);
 }

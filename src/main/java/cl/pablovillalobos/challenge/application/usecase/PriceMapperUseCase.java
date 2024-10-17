@@ -11,4 +11,6 @@ public interface PriceMapperUseCase {
 
     PriceResponseDto modelToDto(Price price);
 
+    PriceResponseDto entityToDto(PriceEntity price);
+
 }

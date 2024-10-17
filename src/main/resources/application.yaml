@@ -16,3 +16,6 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC

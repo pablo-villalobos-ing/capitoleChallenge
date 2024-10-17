@@ -55,4 +55,16 @@ public class PriceMapper implements PriceMapperUseCase {
                 .value(price.getValue())
                 .build();
     }
+
+    @Override
+    public PriceResponseDto entityToDto(PriceEntity price) {
+        return PriceResponseDto.builder()
+                .brandId(price.getBrandEntity().getBrandEntityId())
+                .productId(price.getProductEntity().getProductEntityId())
+                .startDate(price.getStartDate())
+                .endDate(price.getEndDate())
+                .priceList(price.getPriceList())
+                .value(price.getValue())
+                .build();
+    }
 }

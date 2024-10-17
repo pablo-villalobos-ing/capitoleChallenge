@@ -21,7 +21,6 @@ public class PricePersistenceAdapter implements PricePersistencePort {
     private final PriceJPARepository repository;
     private final PriceMapper mapper;
 
-
     @Override
     public Optional<PriceResponseDto> findByBrandIdAndDateAndProductId(PriceRequestDto dto) {
         log.info("dto processed, sent to repository method");
@@ -29,11 +28,8 @@ public class PricePersistenceAdapter implements PricePersistencePort {
         log.info("Size result of query: " + pricesList.size());
         return getPrice(pricesList);
     }
-
     protected Optional<PriceResponseDto> getPrice(List<PriceEntity> priceEntities) {
         log.info("Filtering by priority");
         return priceEntities.stream().max(Comparator.comparing(PriceEntity::getPriority)).map(mapper::entityToDto);
     }
-
-
 }

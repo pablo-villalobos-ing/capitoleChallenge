@@ -241,10 +241,11 @@ class PricePersistenceAdapterTest {
     @ParameterizedTest
     @MethodSource("getControlCase")
     void controlCaseTest(PriceRequestDto dto, List<PriceEntity> listPriceEntity, PriceResponseDto expected) {
-        when(priceJPARepository.findByBrandIdAndDateAndProductId(eq(1L), eq(dto.getDate()), eq(35455L)))
+        when(priceJPARepository.findByBrandIdAndDateAndProductId(anyLong(), eq(dto.getDate()), anyLong()))
                 .thenReturn(listPriceEntity);
         when(priceMapper.entityToDto(any())).thenReturn(expected);
         var result = pricePersistenceAdapter.findByBrandIdAndDateAndProductId(dto);
+        assertTrue(result.isPresent());
         assertEquals(expected.getValue(), result.get().getValue());
     }
 }

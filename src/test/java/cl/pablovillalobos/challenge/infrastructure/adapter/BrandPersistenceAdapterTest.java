@@ -1,6 +1,7 @@
 package cl.pablovillalobos.challenge.infrastructure.adapter;
 
 import cl.pablovillalobos.challenge.infrastructure.entities.BrandEntity;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.DataAccessException;
 import cl.pablovillalobos.challenge.infrastructure.persistence.BrandJPARepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +26,7 @@ class BrandPersistenceAdapterTest {
 
 
     @Test
-    void testFindById_WhenBrandExists() {
+    void testFindById_WhenBrandExists() throws DataAccessException {
         Long brandId = 1L;
         BrandEntity mockedBrandEntity = BrandEntity.builder()
                 .brandEntityId(1L)
@@ -41,7 +42,7 @@ class BrandPersistenceAdapterTest {
     }
 
     @Test
-    void testFindById_WhenBrandDoesNotExist() {
+    void testFindById_WhenBrandDoesNotExist() throws DataAccessException {
         Long brandId = 1L;
         when(brandJPARepository.findById(brandId)).thenReturn(Optional.empty());
         Optional<BrandEntity> result = brandPersistenceAdapter.findById(brandId);

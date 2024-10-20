@@ -4,6 +4,7 @@ import cl.pablovillalobos.challenge.application.mapper.BrandMapper;
 import cl.pablovillalobos.challenge.domain.model.Brand;
 import cl.pablovillalobos.challenge.infrastructure.adapter.BrandPersistenceAdapter;
 import cl.pablovillalobos.challenge.infrastructure.entities.BrandEntity;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.DataAccessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +31,7 @@ class BrandServiceTest {
     private BrandMapper mapper;
 
     @Test
-    void getBrandByIdTest() {
+    void getBrandByIdTest() throws DataAccessException {
         var brand = getBrandData();
         var brandEntity = getBrandEntity();
         Mockito.when(adapter.findById(anyLong())).thenReturn(brandEntity);
@@ -40,7 +41,7 @@ class BrandServiceTest {
     }
 
     @Test
-    void getBrandByIdExpectedNull() {
+    void getBrandByIdExpectedNull() throws DataAccessException {
         Mockito.when(adapter.findById(1L)).thenReturn(Optional.empty());
         var result = service.getBranById(1L);
         assertNull(result);
@@ -48,7 +49,7 @@ class BrandServiceTest {
     }
 
     @Test
-    void getBrandEntityByIdTest() {
+    void getBrandEntityByIdTest() throws DataAccessException {
         var brandEntity = getBrandEntity();
         Mockito.when(adapter.findById(anyLong())).thenReturn(brandEntity);
         var result = service.getBrandEntityById(1L);
@@ -57,7 +58,7 @@ class BrandServiceTest {
     }
 
     @Test
-    void getBrandEntityByIdExpectedNull() {
+    void getBrandEntityByIdExpectedNull() throws DataAccessException {
         Mockito.when(adapter.findById(1L)).thenReturn(Optional.empty());
         var result = service.getBrandEntityById(1L);
         assertNull(result);

@@ -5,6 +5,10 @@ import cl.pablovillalobos.challenge.domain.ports.out.PricePersistencePort;
 import cl.pablovillalobos.challenge.infrastructure.controllers.dto.PriceRequestDto;
 import cl.pablovillalobos.challenge.infrastructure.controllers.dto.PriceResponseDto;
 import cl.pablovillalobos.challenge.infrastructure.entities.BrandEntity;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.BrandNotFoundException;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.DataAccessException;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.PriceNotFoundException;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.ProductNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,9 +21,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PriceServiceTest {
@@ -32,33 +38,49 @@ class PriceServiceTest {
     @Mock
     private PricePersistencePort pricePersistencePort;
 
-    @Test
-    void foundPriceWithBrandNull() {
-        var dto = getDto();
-        Mockito.when(brandService.getBrandEntityById(anyLong())).thenReturn(null);
-        var result = service.foundPrice(dto);
-        assertTrue(result.isEmpty());
+    private static PriceRequestDto getPriceRequestDto() {
+        return PriceRequestDto.builder()
+                .brandId(1L)
+                .productId(1L)
+                .date(LocalDateTime.now())
+                .build();
     }
 
     @Test
-    void foundPriceWithProductNull() {
+    void foundPriceWithBrandNull() throws DataAccessException, ProductNotFoundException, PriceNotFoundException {
         var dto = getDto();
-        Mockito.when(brandService.getBrandEntityById(anyLong())).thenReturn(getBrandEntity());
-        Mockito.when(productService.getProductById(anyLong())).thenReturn(null);
-        var result = service.foundPrice(dto);
-        assertTrue(result.isEmpty());
+        var priceRequestDto = getPriceRequestDto();
+        Mockito.when(brandService.existsBrandById(anyLong())).thenReturn(Boolean.FALSE);
+        var exception = assertThrows(BrandNotFoundException.class, () -> {
+            service.foundPrice(dto);
+        });
+        assertEquals("Brand not found on database with id: 1", exception.getMessage());
+        verify(pricePersistencePort, never()).findByBrandIdAndDateAndProductId(any());
+    }
+
+    @Test
+    void foundPriceWithProductNull() throws DataAccessException, BrandNotFoundException, ProductNotFoundException, PriceNotFoundException {
+        var dto = getDto();
+        var priceRequestDto = getPriceRequestDto();
+        Mockito.when(brandService.existsBrandById(anyLong())).thenReturn(Boolean.TRUE);
+        Mockito.when(productService.existProductById(anyLong())).thenReturn(Boolean.FALSE);
+        var exception = assertThrows(ProductNotFoundException.class, () -> {
+            service.foundPrice(priceRequestDto);
+        });
+        assertEquals("Product not found on database with id:1", exception.getMessage());
+        verify(pricePersistencePort, never()).findByBrandIdAndDateAndProductId(any());
 
     }
 
     @Test
-    void foundPriceTest() {
+    void foundPriceTest() throws DataAccessException, BrandNotFoundException, ProductNotFoundException, PriceNotFoundException {
         var dto = getDto();
-        Mockito.when(brandService.getBrandEntityById(anyLong())).thenReturn(getBrandEntity());
-        Mockito.when(productService.getProductById(anyLong())).thenReturn(getProduct());
+        Mockito.when(brandService.existsBrandById(anyLong())).thenReturn(Boolean.TRUE);
+        Mockito.when(productService.existProductById(anyLong())).thenReturn(Boolean.TRUE);
         Mockito.when(pricePersistencePort.findByBrandIdAndDateAndProductId(any())).thenReturn(getResponse());
         var result = service.foundPrice(dto);
-        assertTrue(result.isPresent());
-        assertEquals(1, result.get().getPriceList());
+
+        assertEquals(1, result.getPriceList());
     }
 
     private Optional<PriceResponseDto> getResponse() {

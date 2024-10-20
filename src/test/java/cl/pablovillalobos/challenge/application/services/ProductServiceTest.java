@@ -4,6 +4,7 @@ import cl.pablovillalobos.challenge.application.mapper.ProductMapper;
 import cl.pablovillalobos.challenge.domain.model.Product;
 import cl.pablovillalobos.challenge.infrastructure.adapter.ProductPersistenceAdapter;
 import cl.pablovillalobos.challenge.infrastructure.entities.ProductEntity;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.DataAccessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +29,7 @@ class ProductServiceTest {
     private ProductMapper mapper;
 
     @Test
-    public void getProductByIdTest() {
+    void getProductByIdTest() throws DataAccessException {
         var productEntity = getProductEntity();
         var product = getProduct();
         Mockito.when(adapter.findById(anyLong())).thenReturn(productEntity);
@@ -38,14 +39,14 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductByIdExpectedNull() {
+    void getProductByIdExpectedNull() throws DataAccessException {
         Mockito.when(adapter.findById(anyLong())).thenReturn(Optional.empty());
         var result = service.getProductById(1L);
         assertNull(result);
     }
 
     @Test
-    void getProductEntityByIdTest() {
+    void getProductEntityByIdTest() throws DataAccessException {
         var productEntity = getProductEntity();
         Mockito.when(adapter.findById(anyLong())).thenReturn(productEntity);
         var result = service.getProductEntityById(1L);
@@ -53,7 +54,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductEntityByIdExpectedNull() {
+    void getProductEntityByIdExpectedNull() throws DataAccessException {
         Mockito.when(adapter.findById(anyLong())).thenReturn(Optional.empty());
         var result = service.getProductEntityById(1L);
         assertNull(result);

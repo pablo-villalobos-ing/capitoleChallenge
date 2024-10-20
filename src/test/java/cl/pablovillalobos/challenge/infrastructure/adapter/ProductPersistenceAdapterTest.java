@@ -1,6 +1,7 @@
 package cl.pablovillalobos.challenge.infrastructure.adapter;
 
 import cl.pablovillalobos.challenge.infrastructure.entities.ProductEntity;
+import cl.pablovillalobos.challenge.infrastructure.exceptions.DataAccessException;
 import cl.pablovillalobos.challenge.infrastructure.persistence.ProductJPARepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ class ProductPersistenceAdapterTest {
     private ProductJPARepository productJPARepository;
 
     @Test
-    void testFindById_WhenProductExists() {
+    void testFindById_WhenProductExists() throws DataAccessException {
         Long productId = 1L;
 
         ProductEntity mockedProductEntity = ProductEntity.builder()
@@ -40,7 +41,7 @@ class ProductPersistenceAdapterTest {
     }
 
     @Test
-    void testFindById_WhenProductDoesNotExist() {
+    void testFindById_WhenProductDoesNotExist() throws DataAccessException {
         Long productId = 1L;
 
         when(productJPARepository.findById(productId)).thenReturn(Optional.empty());

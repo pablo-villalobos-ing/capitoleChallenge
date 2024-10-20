@@ -1,22 +1,20 @@
 package cl.pablovillalobos.challenge.application.mapper;
 
-import cl.pablovillalobos.challenge.application.services.BrandService;
-import cl.pablovillalobos.challenge.application.services.ProductService;
 import cl.pablovillalobos.challenge.application.usecase.PriceMapperUseCase;
 import cl.pablovillalobos.challenge.domain.model.Price;
 import cl.pablovillalobos.challenge.infrastructure.controllers.dto.PriceResponseDto;
+import cl.pablovillalobos.challenge.infrastructure.entities.BrandEntity;
 import cl.pablovillalobos.challenge.infrastructure.entities.PriceEntity;
+import cl.pablovillalobos.challenge.infrastructure.entities.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class PriceMapper implements PriceMapperUseCase {
-    private BrandService brandService;
-    private ProductService productService;
 
     @Override
-    public PriceEntity modelToEntity(Price price) {
+    public PriceEntity modelToEntity(Price price, BrandEntity brand, ProductEntity product) {
         return PriceEntity.builder()
                 .id(price.getId())
                 .value(price.getValue())
@@ -24,8 +22,8 @@ public class PriceMapper implements PriceMapperUseCase {
                 .startDate(price.getStartDate())
                 .endDate(price.getEndDate())
                 .priceList(price.getPriceList())
-                .productEntity(productService.getProductEntityById(price.getProductId()))
-                .brandEntity(brandService.getBrandEntityById(price.getBrandId()))
+                .productEntity(product)
+                .brandEntity(brand)
                 .build();
     }
 

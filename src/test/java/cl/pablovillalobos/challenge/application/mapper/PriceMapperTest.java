@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PriceMapperTest {
@@ -74,12 +72,10 @@ class PriceMapperTest {
         BrandEntity mockedBrandEntity = BrandEntity.builder().brandEntityId(1L).build();
         Price price = getPrice();
 
-        // Mocking external dependencies
-        when(productService.getProductEntityById(1L)).thenReturn(mockedProductEntity);
-        when(brandService.getBrandEntityById(1L)).thenReturn(mockedBrandEntity);
+
 
         // When
-        PriceEntity priceEntity = priceMapper.modelToEntity(price);
+        PriceEntity priceEntity = priceMapper.modelToEntity(price, mockedBrandEntity, mockedProductEntity);
 
         // Then
         assertNotNull(priceEntity);
@@ -91,9 +87,6 @@ class PriceMapperTest {
         assertEquals(mockedProductEntity, priceEntity.getProductEntity());
         assertEquals(mockedBrandEntity, priceEntity.getBrandEntity());
 
-        // Verify interactions
-        verify(productService).getProductEntityById(1L);
-        verify(brandService).getBrandEntityById(1L);
     }
 
     @Test
